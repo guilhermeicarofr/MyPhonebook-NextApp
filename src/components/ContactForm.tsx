@@ -50,7 +50,7 @@ export default function ContactForm({ method, contact }: { method: string, conta
       if(errors.state) errorMessage += errors.state;
       if(errors.phone) errorMessage += errors.phone;
 
-      toast(errorMessage);
+      toast.error(errorMessage);
       return;
     }
 
@@ -78,7 +78,7 @@ export default function ContactForm({ method, contact }: { method: string, conta
       if(!confirm(`Do you want to delete contact: ${contact.name}?`)) return;
       useDeleteContact(userData, contact);
 
-      toast('Contact deleted.')
+      toast.success(`Contact ${contact.name} deleted.`);
       setSelected('');
       setReload(!reload);
     }

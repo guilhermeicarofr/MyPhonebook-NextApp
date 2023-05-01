@@ -15,7 +15,7 @@ export default function Login() {
     if(!setUserData) return;
 
     if(!useLogin({ username, password })) {
-      toast('Invalid Credentials');
+      toast.error('Invalid Credentials');
       return;
     } 
     setUserData(username);
