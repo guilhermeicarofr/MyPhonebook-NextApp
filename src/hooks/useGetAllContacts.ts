@@ -13,6 +13,12 @@ function useGetAllContacts(user: string, search: string) {
       return (search === contact.name.substring(0, (search.length)));
     });
   }
+
+  list.sort((a, b) => {
+    if(a.name < b.name) return -1;
+    if(a.name > b.name) return 1;
+    return 0;
+  });
   
   return list;
 }
