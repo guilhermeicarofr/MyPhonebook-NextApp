@@ -1,9 +1,10 @@
+import { Dispatch, FormEvent, SetStateAction, useContext, useState } from 'react';
+
 import { UserContext } from '@/contexts/UserContext';
 import { useCreateNewContact } from '@/hooks/useCreateNewContact';
 import { Contact } from '@/models/contactsModels';
-import { FormEvent, useContext, useState } from 'react';
 
-export default function ContactForm({ method, contact }: { method: string, contact: Contact | null }) {
+export default function ContactForm({ method, contact, reload, setReload }: { method: string, contact: Contact | null, reload: boolean, setReload: Dispatch<SetStateAction<boolean>> }) {
   const { userData } = useContext(UserContext);
 
   let name = '';
@@ -35,6 +36,7 @@ export default function ContactForm({ method, contact }: { method: string, conta
         state: newState,
         phone: newPhone
       });
+      setReload(!reload);
     }
   }
 
