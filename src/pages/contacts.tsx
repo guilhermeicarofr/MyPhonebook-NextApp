@@ -17,23 +17,29 @@ export default function ContactsPage() {
   const [ list, setList ] = useState([] as ContactsList);
   const [ reload, setReload ] = useState(false);
   const [ selected, setSelected ] = useState('');
+  const [ search, setSearch ] = useState('');
 
   useEffect(() => {
-    setList(useGetAllContacts(userData));
-  }, [ reload, userData ]);
+    setList(useGetAllContacts(userData, search));
+  }, [ reload, userData, search ]);
 
   return (
     <PrivatePage>
       <ContactsListContext.Provider value={{ reload, setReload, selected, setSelected }}>
         <Header title={'Contacts'} />
         <main className={styles.main}>
-
           <h1>Contacts</h1>
+          
+          <input
+            name='search'
+            placeholder='Search contact name'
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            type="text"
+          />
 
           {list.map((contact: Contact) => <ContactItem key={contact.id} contact={contact} />)}
-
           <ContactForm method={'create'} contact={null} />
-
         </main>
       </ContactsListContext.Provider>
     </PrivatePage>
