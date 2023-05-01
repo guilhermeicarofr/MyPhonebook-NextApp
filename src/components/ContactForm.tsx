@@ -1,4 +1,5 @@
 import { FormEvent, useContext, useState } from 'react';
+import { toast } from 'react-toastify';
 
 import { UserContext } from '@/contexts/UserContext';
 import { useCreateNewContact } from '@/hooks/useCreateNewContact';
@@ -6,6 +7,7 @@ import { Contact } from '@/models/contactsModels';
 import { ContactsListContext } from '@/contexts/ContactsListContext';
 import { useUpdateContact } from '@/hooks/useUpdateContact';
 import { useDeleteContact } from '@/hooks/useDeleteContact';
+import { useValidateForm } from '@/hooks/useValidateForm';
 
 export default function ContactForm({ method, contact }: { method: string, contact: Contact | null }) {
   const { userData } = useContext(UserContext);
@@ -32,24 +34,40 @@ export default function ContactForm({ method, contact }: { method: string, conta
   function submitContactForm(e: FormEvent) {
     e.preventDefault();
 
+    const formInput = {
+      name: newName,
+      country: newCountry,
+      state: newState,
+      phone: newPhone
+    };
+
+    const { valid, errors } = useValidateForm(formInput);
+    if(!valid) {
+      let errorMessage = 'Invalid Input: ';
+
+      if(errors.name) errorMessage += errors.name;
+      if(errors.country) errorMessage += errors.country;
+      if(errors.state) errorMessage += errors.state;
+      if(errors.phone) errorMessage += errors.phone;
+
+      toast.error(errorMessage);
+      return;
+    }
+
     if(method === 'edit') {
       useUpdateContact(userData, {
-        id,
-        name: newName,
-        country: newCountry,
-        state: newState,
-        phone: newPhone
+        ...formInput, id
       });
       setSelected('');
       setReload(!reload);
     }
     if(method === 'create') {
-      useCreateNewContact(userData, {
-        name: newName,
-        country: newCountry,
-        state: newState,
-        phone: newPhone
-      });
+      useCreateNewContact(userData, formInput);
+      setNewName('');
+      setNewCountry('');
+      setNewState('');
+      setNewPhone('');
+
       setSelected('');
       setReload(!reload);
     }
@@ -57,7 +75,10 @@ export default function ContactForm({ method, contact }: { method: string, conta
 
   function deleteContact() {
     if(method === 'edit' && contact) {
+      if(!confirm(`Do you want to delete contact: ${contact.name}?`)) return;
       useDeleteContact(userData, contact);
+
+      toast.success(`Contact ${contact.name} deleted.`);
       setSelected('');
       setReload(!reload);
     }

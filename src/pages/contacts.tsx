@@ -20,7 +20,7 @@ export default function ContactsPage() {
 
   useEffect(() => {
     setList(useGetAllContacts(userData));
-  }, [ reload ]);
+  }, [ reload, userData ]);
 
   return (
     <PrivatePage>

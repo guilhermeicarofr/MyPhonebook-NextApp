@@ -1,4 +1,5 @@
 import { FormEvent, useContext, useState } from 'react';
+import { toast } from 'react-toastify';
 
 import { UserContext } from '@/contexts/UserContext';
 import { useLogin } from '@/hooks/useLogin';
@@ -13,9 +14,11 @@ export default function Login() {
     e.preventDefault();
     if(!setUserData) return;
 
-    if(useLogin({ username, password })) {
-      setUserData(username);
-    }
+    if(!useLogin({ username, password })) {
+      toast.error('Invalid Credentials');
+      return;
+    } 
+    setUserData(username);
   }
 
   return (
