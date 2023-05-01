@@ -1,17 +1,22 @@
-import { Dispatch, FormEvent, SetStateAction, useContext, useState } from 'react';
+import { FormEvent, useContext, useState } from 'react';
 
 import { UserContext } from '@/contexts/UserContext';
 import { useCreateNewContact } from '@/hooks/useCreateNewContact';
 import { Contact } from '@/models/contactsModels';
+import { ContactsListContext } from '@/contexts/ContactsListContext';
+import { useUpdateContact } from '@/hooks/useUpdateContact';
 
-export default function ContactForm({ method, contact, reload, setReload }: { method: string, contact: Contact | null, reload: boolean, setReload: Dispatch<SetStateAction<boolean>> }) {
+export default function ContactForm({ method, contact }: { method: string, contact: Contact | null }) {
   const { userData } = useContext(UserContext);
+  const { reload, setReload, setSelected } = useContext(ContactsListContext);
 
+  let id = '';
   let name = '';
   let country = '';
   let state = '';
   let phone = '';
   if(method === 'edit' && contact) {
+    id = contact.id;
     name = contact.name;
     country = contact.country;
     state = contact.state;
@@ -27,7 +32,15 @@ export default function ContactForm({ method, contact, reload, setReload }: { me
     e.preventDefault();
 
     if(method === 'edit') {
-      return;      
+      useUpdateContact(userData, {
+        id,
+        name: newName,
+        country: newCountry,
+        state: newState,
+        phone: newPhone
+      });
+      setSelected('');
+      setReload(!reload);
     }
     if(method === 'create') {
       useCreateNewContact(userData, {
@@ -36,6 +49,7 @@ export default function ContactForm({ method, contact, reload, setReload }: { me
         state: newState,
         phone: newPhone
       });
+      setSelected('');
       setReload(!reload);
     }
   }

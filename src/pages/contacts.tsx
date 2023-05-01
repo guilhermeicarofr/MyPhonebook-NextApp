@@ -7,6 +7,8 @@ import ContactForm from '@/components/ContactForm';
 import { useGetAllContacts } from '@/hooks/useGetAllContacts';
 import { Contact, ContactsList } from '@/models/contactsModels';
 import { UserContext } from '@/contexts/UserContext';
+import ContactItem from '@/components/Contact';
+import { ContactsListContext } from '@/contexts/ContactsListContext';
 
 export default function ContactsPage() {
 
@@ -14,6 +16,7 @@ export default function ContactsPage() {
 
   const [ list, setList ] = useState([] as ContactsList);
   const [ reload, setReload ] = useState(false);
+  const [ selected, setSelected ] = useState('');
 
   useEffect(() => {
     setList(useGetAllContacts(userData));
@@ -21,17 +24,18 @@ export default function ContactsPage() {
 
   return (
     <PrivatePage>
-      <>
+      <ContactsListContext.Provider value={{ reload, setReload, selected, setSelected }}>
         <Header title={'Contacts'} />
         <main className={styles.main}>
+
           <h1>Contacts</h1>
 
-          {list.map((contact: Contact) => <h4 key={contact.id}>{contact.name}</h4>)}
+          {list.map((contact: Contact) => <ContactItem key={contact.id} contact={contact} />)}
 
-          <ContactForm method={'create'} contact={null} reload={reload} setReload={setReload} />
+          <ContactForm method={'create'} contact={null} />
 
         </main>
-      </>
+      </ContactsListContext.Provider>
     </PrivatePage>
   );
 }
