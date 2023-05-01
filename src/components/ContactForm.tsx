@@ -5,6 +5,7 @@ import { useCreateNewContact } from '@/hooks/useCreateNewContact';
 import { Contact } from '@/models/contactsModels';
 import { ContactsListContext } from '@/contexts/ContactsListContext';
 import { useUpdateContact } from '@/hooks/useUpdateContact';
+import { useDeleteContact } from '@/hooks/useDeleteContact';
 
 export default function ContactForm({ method, contact }: { method: string, contact: Contact | null }) {
   const { userData } = useContext(UserContext);
@@ -54,6 +55,14 @@ export default function ContactForm({ method, contact }: { method: string, conta
     }
   }
 
+  function deleteContact() {
+    if(method === 'edit' && contact) {
+      useDeleteContact(userData, contact);
+      setSelected('');
+      setReload(!reload);
+    }
+  }
+
   return (
     <div>
       <form onSubmit={submitContactForm}>
@@ -91,6 +100,7 @@ export default function ContactForm({ method, contact }: { method: string, conta
         />
         <button>Save contact</button>
       </form>
+      {(method==='edit')? <button onClick={deleteContact}>Delete</button> : <></>}
     </div>
   );
 }
