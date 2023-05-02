@@ -22,6 +22,7 @@ PASSWORD={insira aqui sua senha}
 
 
 ```bash
+npm install
 npm run dev
 ```
 - A aplicação estará disponível no endpoint http://localhost:3000/
