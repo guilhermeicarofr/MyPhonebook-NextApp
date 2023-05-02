@@ -12,9 +12,9 @@ export default function Home() {
 
   return (
     <>
-      <Header title={'Welcome'} />
+      <Header title={'MyPhonebook'} />
       <main className={styles.main}>
-        <h1>MyAgenda</h1>
+        <h1>MyPhonebook</h1>
         {(userData)?
           <UserInfo /> :
           <Login />

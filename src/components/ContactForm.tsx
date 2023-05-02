@@ -1,4 +1,4 @@
-import { FormEvent, useContext, useState } from 'react';
+import { Dispatch, FormEvent, SetStateAction, useContext, useState } from 'react';
 import { toast } from 'react-toastify';
 
 import { UserContext } from '@/contexts/UserContext';
@@ -9,9 +9,12 @@ import { useUpdateContact } from '@/hooks/useUpdateContact';
 import { useDeleteContact } from '@/hooks/useDeleteContact';
 import { useValidateForm } from '@/hooks/useValidateForm';
 
-export default function ContactForm({ method, contact }: { method: string, contact: Contact | null }) {
+export default function ContactForm(
+  { method, contact, setOpen }:
+  { method: string, contact: Contact | null, setOpen:Dispatch<SetStateAction<boolean>> }) {
+
   const { userData } = useContext(UserContext);
-  const { reload, setReload, setSelected } = useContext(ContactsListContext);
+  const { reload, setReload } = useContext(ContactsListContext);
 
   let id = '';
   let name = '';
@@ -58,7 +61,7 @@ export default function ContactForm({ method, contact }: { method: string, conta
       useUpdateContact(userData, {
         ...formInput, id
       });
-      setSelected('');
+      setOpen(false);
       setReload(!reload);
     }
     if(method === 'create') {
@@ -68,7 +71,7 @@ export default function ContactForm({ method, contact }: { method: string, conta
       setNewState('');
       setNewPhone('');
 
-      setSelected('');
+      setOpen(false);
       setReload(!reload);
     }
   }
@@ -79,13 +82,13 @@ export default function ContactForm({ method, contact }: { method: string, conta
       useDeleteContact(userData, contact);
 
       toast.success(`Contact ${contact.name} deleted.`);
-      setSelected('');
+      setOpen(false);
       setReload(!reload);
     }
   }
 
   return (
-    <div>
+    <>
       <form onSubmit={submitContactForm}>
         <input
           name='newName'
@@ -122,6 +125,6 @@ export default function ContactForm({ method, contact }: { method: string, conta
         <button>Save contact</button>
       </form>
       {(method==='edit')? <button onClick={deleteContact}>Delete</button> : <></>}
-    </div>
+    </>
   );
 }
