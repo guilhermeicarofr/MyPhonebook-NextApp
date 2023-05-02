@@ -1,5 +1,7 @@
 import { useContext } from 'react';
-import Link from 'next/link'
+import Link from 'next/link';
+import PhoneIcon from '@mui/icons-material/Phone';
+import Button from '@mui/material/Button';
 
 import styles from '@/styles/Home.module.css'
 import { UserContext } from '@/contexts/UserContext';
@@ -12,16 +14,16 @@ export default function Home() {
 
   return (
     <>
-      <Header title={'Welcome'} />
+      <Header title={'MyPhonebook'} />
       <main className={styles.main}>
-        <h1>MyAgenda</h1>
+        <h1><PhoneIcon /> MyPhonebook</h1>
         {(userData)?
           <UserInfo /> :
           <Login />
         }
         {(userData)?
-          <button><Link href='/contacts'>See my contacts</Link></button> :
-          <button disabled>LogIn to see contacts list</button>
+          <Button variant='outlined'><Link href='/contacts'>See my contacts</Link></Button> :
+          <Button variant='outlined' disabled>LogIn to see contacts list</Button>
         }
       </main>
     </>

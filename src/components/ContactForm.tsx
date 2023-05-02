@@ -1,5 +1,7 @@
-import { FormEvent, useContext, useState } from 'react';
+import { Dispatch, FormEvent, SetStateAction, useContext, useState } from 'react';
 import { toast } from 'react-toastify';
+import Button from '@mui/material/Button';
+import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 
 import { UserContext } from '@/contexts/UserContext';
 import { useCreateNewContact } from '@/hooks/useCreateNewContact';
@@ -8,10 +10,14 @@ import { ContactsListContext } from '@/contexts/ContactsListContext';
 import { useUpdateContact } from '@/hooks/useUpdateContact';
 import { useDeleteContact } from '@/hooks/useDeleteContact';
 import { useValidateForm } from '@/hooks/useValidateForm';
+import styled from 'styled-components';
 
-export default function ContactForm({ method, contact }: { method: string, contact: Contact | null }) {
+export default function ContactForm(
+  { method, contact, setOpen }:
+  { method: string, contact: Contact | null, setOpen:Dispatch<SetStateAction<boolean>> }) {
+
   const { userData } = useContext(UserContext);
-  const { reload, setReload, setSelected } = useContext(ContactsListContext);
+  const { reload, setReload } = useContext(ContactsListContext);
 
   let id = '';
   let name = '';
@@ -58,7 +64,7 @@ export default function ContactForm({ method, contact }: { method: string, conta
       useUpdateContact(userData, {
         ...formInput, id
       });
-      setSelected('');
+      setOpen(false);
       setReload(!reload);
     }
     if(method === 'create') {
@@ -68,7 +74,7 @@ export default function ContactForm({ method, contact }: { method: string, conta
       setNewState('');
       setNewPhone('');
 
-      setSelected('');
+      setOpen(false);
       setReload(!reload);
     }
   }
@@ -79,17 +85,17 @@ export default function ContactForm({ method, contact }: { method: string, conta
       useDeleteContact(userData, contact);
 
       toast.success(`Contact ${contact.name} deleted.`);
-      setSelected('');
+      setOpen(false);
       setReload(!reload);
     }
   }
 
   return (
-    <div>
+    <ContactFormBox>
       <form onSubmit={submitContactForm}>
         <input
           name='newName'
-          placeholder='New name'
+          placeholder='Name'
           value={newName}
           onChange={(e) => setNewName(e.target.value)}
           type="text"
@@ -97,7 +103,7 @@ export default function ContactForm({ method, contact }: { method: string, conta
         />
         <input
           name='newCountry'
-          placeholder='New country code'
+          placeholder='Country code'
           value={newCountry}
           onChange={(e) => setNewCountry(e.target.value)}
           type="text"
@@ -105,7 +111,7 @@ export default function ContactForm({ method, contact }: { method: string, conta
         />
         <input
           name='newState'
-          placeholder='New state code'
+          placeholder='State code'
           value={newState}
           onChange={(e) => setNewState(e.target.value)}
           type="text"
@@ -113,15 +119,47 @@ export default function ContactForm({ method, contact }: { method: string, conta
         />
         <input
           name='newPhone'
-          placeholder='New phone number'
+          placeholder='Phone number'
           value={newPhone}
           onChange={(e) => setNewPhone(e.target.value)}
           type="text"
           required
         />
-        <button>Save contact</button>
       </form>
-      {(method==='edit')? <button onClick={deleteContact}>Delete</button> : <></>}
-    </div>
+      <Button variant='outlined' size='small' onClick={submitContactForm}>Save contact</Button>
+      {(method==='edit')? <DeleteIcon onClick={deleteContact} /> : <></>}
+    </ContactFormBox>
   );
 }
+
+
+const ContactFormBox = styled.div`
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  input {
+    width: 100%;
+    height: 30px;
+    outline: none;
+    border: 1px solid #1C4C71;
+    border-radius: 10px;
+    padding: 0px 10px;
+    color: #1C4C71;
+  }
+  form {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 25px;
+  }
+`;
+
+const DeleteIcon = styled(DeleteOutlineIcon)`
+  position: absolute;
+  bottom: 3px;
+  right: 5px;
+  color: #1C4C71;
+`;
