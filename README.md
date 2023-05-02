@@ -1,38 +1,52 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# MyPhonebook
+- Autor: Guilherme Icaro F Real [@GitHub](https://www.github.com/guilhermeicarofr) [@LinkedIn](https://www.linkedin.com/in/guilhermeicarofr/)
+- Tecnologias utilizadas: React.js, Typescript, Next.js, UUID, Styled-Components, MaterialUI, MaterialIcons, Eslint, React-Toastify
 
-## Getting Started
+#
 
-First, run the development server:
+## Como rodar:
+- Primeiro passo - clonar este mesmo repositório para sua máquina:
+````
+git clone "https://github.com/guilhermeicarofr/API-Menu"
+````
+- Segundo passo - dentro da pasta do projeto, criar um arquivo com nome ".env.local" da seguinte forma:
+````
+USERNAME={insira aqui seu nome de usuario}
+PASSWORD={insira aqui sua senha}
+````
+
+- As credenciais inseridas no arquivo serão usadas para realizar o login
+
+### Rodar localmente:
+- Necessário instalação do Node e NPM na máquina (v19+ recomendado) (veja: https://heynode.com/tutorial/install-nodejs-locally-nvm/)
+
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
 ```
+- A aplicação estará disponível no endpoint http://localhost:3000/
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+#
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+## Como utilizar:
+- Acesse a tela inicial de login e use as credenciais preenchidas no arquivo .env.local
+- Navegue para a lista de contatos usando o botão no inferior da página ou usando a rota [ /contacts ]
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+- A página de contatos é protegida contra usuários não autorizados, será impossível acessá-la caso não seja um usuário logado
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+- Na lista de contatos, adicione um novo contato através do botão [CREATE NEW CONTACT]
+- Cada contato é composto por:
+```
+name: string
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+country code: string iniciada em + e númerica, 1 a 2 digitos
 
-## Learn More
+state code: string númerica de 2 digitos
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+phone number: string númerica de 8 ou mais digitos
+```
+- Todos os contatos serão exibidos na lista
+- Cada contato é armazenado através de um ID único no armazenamento do seu navegador (Local Storage)
+- Você pode pesquisar contatos por nome na barra de busca no topo da página, apenas contatos cuja propriedade NAME inicia com a busca digitada serão mostrados na lista
+- Para editar um contato, utilize o icone de edição ao lado dos dados do contato
+- Para deletar um contato, clique no icone de edição, e na tela de edição selecione o ícone de deletar
