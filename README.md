@@ -7,7 +7,7 @@
 ## Como rodar:
 - Primeiro passo - clonar este mesmo repositório para sua máquina:
 ````
-git clone "https://github.com/guilhermeicarofr/API-Menu"
+git clone "https://github.com/guilhermeicarofr/front-junior-creativecode-2023"
 ````
 - Segundo passo - dentro da pasta do projeto, criar um arquivo com nome ".env.local" da seguinte forma:
 ````
